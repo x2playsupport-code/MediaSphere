@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaSphere - השחלת מדיה ושיתוף</title>
+    <title>MediaSphere - השלם, שתף והורד</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg-main: #0a0b10;
-            --glass-bg: rgba(18, 20, 29, 0.65);
+            --glass-bg: rgba(18, 20, 29, 0.7);
             --glass-border: rgba(255, 255, 255, 0.08);
             --accent-cyan: #00f2fe;
             --accent-purple: #4facfe;
@@ -43,7 +43,7 @@
             z-index: 100;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            background: rgba(10, 11, 16, 0.8);
+            background: rgba(10, 11, 16, 0.85);
             border-bottom: 1px solid var(--glass-border);
             padding: 1rem 1.5rem;
         }
@@ -60,70 +60,82 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 800;
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0,242,254,0.3);
         }
 
         .logo i {
             color: var(--accent-cyan);
             -webkit-text-fill-color: initial;
+            filter: drop-shadow(0 0 10px var(--accent-cyan));
         }
 
         .main-container {
-            max-width: 700px;
+            max-width: 680px;
             margin: 2rem auto;
-            padding: 0 1rem 5rem 1rem;
+            padding: 0 1rem 6rem 1rem;
         }
 
+        /* Upload Card */
         .upload-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            padding: 1.8rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
 
         .upload-area {
-            border: 2px dashed rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 2rem 1rem;
+            border: 2px dashed rgba(0, 242, 254, 0.3);
+            border-radius: 18px;
+            padding: 2.2rem 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.02);
-            margin-bottom: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(0, 242, 254, 0.02);
+            margin-bottom: 1.2rem;
         }
 
-        .upload-area:active, .upload-area.dragover {
+        .upload-area:hover, .upload-area:active {
             border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.05);
+            background: rgba(0, 242, 254, 0.06);
+            box-shadow: 0 0 20px rgba(0,242,254,0.15);
         }
 
         .upload-icon {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--accent-cyan);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            filter: drop-shadow(0 0 10px rgba(0,242,254,0.4));
+        }
+
+        .upload-area h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
 
         .previews-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
             gap: 10px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
         .preview-item {
             position: relative;
             aspect-ratio: 1;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid var(--glass-border);
+            background: #000;
         }
 
         .preview-item img, .preview-item video {
@@ -134,76 +146,111 @@
 
         .remove-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.7);
+            top: 6px;
+            right: 6px;
+            background: rgba(0,0,0,0.75);
             color: #ff4757;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.9rem;
+            transition: transform 0.2s;
+        }
+
+        .remove-btn:active {
+            transform: scale(0.9);
         }
 
         textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 14px;
             color: #fff;
             resize: none;
             font-size: 0.95rem;
             outline: none;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
+            transition: border-color 0.3s;
         }
 
         textarea:focus {
             border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0,242,254,0.1);
         }
 
         .post-btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
-            color: #000;
-            font-weight: 700;
-            font-size: 1rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #0a0b10;
+            font-weight: 800;
+            font-size: 1.05rem;
             cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,242,254,0.3);
             transition: transform 0.2s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .post-btn:active {
             transform: scale(0.98);
         }
 
-        /* Feed Styles */
+        /* Feed Card Styles */
         .feed-item {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 1.2rem;
-            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(247,37,133,0.3);
         }
 
         .media-slider {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             margin: 1rem 0;
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
         .media-slider::-webkit-scrollbar {
-            height: 4px;
+            height: 6px;
         }
 
         .media-slider::-webkit-scrollbar-thumb {
@@ -217,51 +264,82 @@
             position: relative;
             border-radius: 16px;
             overflow: hidden;
-            max-height: 450px;
             background: #000;
+            max-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid var(--glass-border);
         }
 
         .media-box img, .media-box video {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            max-height: 450px;
+            max-height: 500px;
         }
 
         .download-btn {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
+            bottom: 15px;
+            left: 15px;
+            background: rgba(10, 11, 16, 0.85);
+            backdrop-filter: blur(10px);
             color: var(--accent-cyan);
             border: 1px solid var(--accent-cyan);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            box-shadow: 0 5px 20px rgba(0,242,254,0.25);
+            transition: all 0.2s;
         }
 
         .download-btn:active {
             background: var(--accent-cyan);
-            color: #000;
+            color: #0a0b10;
         }
 
         .post-caption {
-            margin-top: 10px;
-            font-size: 0.95rem;
-            line-height: 1.4;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            word-break: break-word;
         }
 
-        /* Hidden Input */
+        .post-actions {
+            display: flex;
+            gap: 20px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 12px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .action-btn.liked {
+            color: var(--accent-pink);
+        }
+
+        .action-btn:hover {
+            color: var(--text-main);
+        }
+
         #fileInput {
             display: none;
         }
@@ -272,7 +350,7 @@
     <header>
         <div class="header-container">
             <div class="logo">
-                <i class="fa-solid fa-circle-nodes"></i> MediaSphere
+                <i class="fa-solid fa-bolt"></i> MediaSphere
             </div>
         </div>
     </header>
@@ -281,28 +359,43 @@
         
         <!-- Upload Card -->
         <div class="upload-card">
-            <!-- accept="image/*,video/*" ensures gallery option opens on phones -->
             <input type="file" id="fileInput" multiple accept="image/*,video/*">
             
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
                 <div class="upload-icon">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <i class="fa-solid fa-photo-film"></i>
                 </div>
-                <h3>לחץ לבחירה מהגלריה</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">תמונות או סרטונים (עד 5 קבצים)</p>
+                <h3>בחר סרטונים או תמונות מהגלריה</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">תומך בעד 5 קבצים בו-זמנית</p>
             </div>
 
             <div class="previews-grid" id="previewsGrid"></div>
 
-            <textarea id="captionInput" rows="2" placeholder="כתוב משהו על הסרטון/התמונה..."></textarea>
+            <textarea id="captionInput" rows="2" placeholder="מה תרצה לכתוב על הפוסט? #מדיה"></textarea>
             
             <button class="post-btn" onclick="createPost()">
-                <i class="fa-solid fa-paper-plane"></i> פרסם באתר
+                <i class="fa-solid fa-paper-plane"></i> פרסם לכולם באתר
             </button>
         </div>
 
-        <!-- Feed Section -->
-        <div id="feedList"></div>
+        <!-- Feed List -->
+        <div id="feedList">
+            <!-- Sample Post -->
+            <div class="feed-item">
+                <div class="post-header">
+                    <div class="avatar" style="background: linear-gradient(45deg, #00f2fe, #4facfe);">M</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.95rem;">MediaSphere Team</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">לפני דקה</div>
+                    </div>
+                </div>
+                <div class="post-caption">ברוכים הבאים לפלטפורמה המטורפת ביותר לשיתוף מדיה! העלו סרטונים ותמונות, שמרו בלחיצה אחת מכל מכשיר 🚀🔥</div>
+                <div class="post-actions">
+                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> <span>24</span></button>
+                    <button class="action-btn"><i class="fa-regular fa-comment"></i> תגובות</button>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -312,11 +405,14 @@
         const previewsGrid = document.getElementById('previewsGrid');
         const feedList = document.getElementById('feedList');
 
+        // Handles file selection cleanly for PC and mobile (iOS/Android)
         fileInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
+            if (!files.length) return;
             
             if (selectedFiles.length + files.length > 5) {
-                alert('ניתן להעלות עד 5 קבצים בלבד בכל פעם!');
+                alert('ניתן לבחור עד 5 קבצים בלבד בסך הכל!');
+                fileInput.value = '';
                 return;
             }
 
@@ -327,7 +423,6 @@
             });
 
             renderPreviews();
-            fileInput.value = ''; // Reset input
         });
 
         function renderPreviews() {
@@ -348,9 +443,14 @@
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'remove-btn';
                 removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                removeBtn.onclick = () => {
+                removeBtn.onclick = (event) => {
+                    event.stopPropagation();
                     selectedFiles.splice(idx, 1);
                     renderPreviews();
+                    // Clear file input cache so selecting same file again works
+                    if (selectedFiles.length === 0) {
+                        fileInput.value = '';
+                    }
                 };
 
                 div.appendChild(removeBtn);
@@ -359,9 +459,9 @@
         }
 
         function createPost() {
-            const caption = document.getElementById('captionInput').value;
-            if (selectedFiles.length === 0 && !caption.trim()) {
-                alert('יש להעלות לפחות קובץ אחד או לכתוב טקסט.');
+            const caption = document.getElementById('captionInput').value.trim();
+            if (selectedFiles.length === 0 && !caption) {
+                alert('אנא בחר לפחות קובץ אחד מהגלריה או כתוב טקסט לפוסט.');
                 return;
             }
 
@@ -379,7 +479,7 @@
                     mediaHTML += `
                         <div class="media-box">
                             ${isVideo 
-                                ? `<video src="${url}" controls></video>` 
+                                ? `<video src="${url}" controls playsinline></video>` 
                                 : `<img src="${url}">`
                             }
                             <a href="${url}" download="${fileName}" class="download-btn">
@@ -392,8 +492,8 @@
             }
 
             postCard.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: bold;">U</div>
+                <div class="post-header">
+                    <div class="avatar">מש</div>
                     <div>
                         <div style="font-weight: 700; font-size: 0.95rem;">משתמש MediaSphere</div>
                         <div style="font-size: 0.75rem; color: var(--text-muted);">עכשיו</div>
@@ -401,14 +501,34 @@
                 </div>
                 ${mediaHTML}
                 ${caption ? `<div class="post-caption">${caption}</div>` : ''}
+                <div class="post-actions">
+                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> <span>1</span></button>
+                    <button class="action-btn"><i class="fa-regular fa-comment"></i> תגובות</button>
+                </div>
             `;
 
             feedList.prepend(postCard);
 
-            // Reset Form
+            // Reset Form completely
             selectedFiles = [];
+            fileInput.value = '';
             renderPreviews();
             document.getElementById('captionInput').value = '';
+        }
+
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            const icon = btn.querySelector('i');
+            const span = btn.querySelector('span');
+            let count = parseInt(span.textContent);
+
+            if (btn.classList.contains('liked')) {
+                icon.className = 'fa-solid fa-heart';
+                span.textContent = count + 1;
+            } else {
+                icon.className = 'fa-regular fa-heart';
+                span.textContent = count - 1;
+            }
         }
     </script>
 </body>
