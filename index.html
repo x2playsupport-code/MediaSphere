@@ -1,534 +1,612 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaSphere - השלם, שתף והורד</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>MediaSphere - שיתוף מדיה יוקרתי</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Rubik & Heebo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-main: #0a0b10;
-            --glass-bg: rgba(18, 20, 29, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-cyan: #00f2fe;
-            --accent-purple: #4facfe;
-            --accent-pink: #f72585;
-            --text-main: #ffffff;
-            --text-muted: #8a8f9d;
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            accent: '#ec4899',
+                            cyan: '#06b6d4',
+                            neon: '#a855f7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Rubik', 'Heebo', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 3s infinite alternate',
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient-x': 'gradientX 8s ease infinite',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(236, 72, 153, 0.6)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' }
+                        },
+                        gradientX: {
+                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
+                        }
+                    }
+                }
+            }
         }
+    </script>
 
+    <style>
         * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
+            font-family: 'Rubik', 'Heebo', sans-serif;
+            background: #090d16;
+            color: #f3f4f6;
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(247, 37, 133, 0.12) 0%, transparent 40%);
-            background-attachment: fixed;
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        header {
-            position: sticky;
+        /* Dynamic Background Lights */
+        .ambient-bg {
+            position: fixed;
             top: 0;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: rgba(10, 11, 16, 0.85);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 1rem 1.5rem;
-        }
-
-        .header-container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.6rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0,242,254,0.3);
-        }
-
-        .logo i {
-            color: var(--accent-cyan);
-            -webkit-text-fill-color: initial;
-            filter: drop-shadow(0 0 10px var(--accent-cyan));
-        }
-
-        .main-container {
-            max-width: 680px;
-            margin: 2rem auto;
-            padding: 0 1rem 6rem 1rem;
-        }
-
-        /* Upload Card */
-        .upload-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 1.8rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-        }
-
-        .upload-area {
-            border: 2px dashed rgba(0, 242, 254, 0.3);
-            border-radius: 18px;
-            padding: 2.2rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(0, 242, 254, 0.02);
-            margin-bottom: 1.2rem;
-        }
-
-        .upload-area:hover, .upload-area:active {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.06);
-            box-shadow: 0 0 20px rgba(0,242,254,0.15);
-        }
-
-        .upload-icon {
-            font-size: 2.8rem;
-            color: var(--accent-cyan);
-            margin-bottom: 0.8rem;
-            filter: drop-shadow(0 0 10px rgba(0,242,254,0.4));
-        }
-
-        .upload-area h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .previews-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-            gap: 10px;
-            margin-bottom: 1.2rem;
-        }
-
-        .preview-item {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 14px;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
             overflow: hidden;
-            border: 1px solid var(--glass-border);
-            background: #000;
         }
 
-        .preview-item img, .preview-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .remove-btn {
+        .glow-orb {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(0,0,0,0.75);
-            color: #ff4757;
-            border: none;
             border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            transition: transform 0.2s;
+            filter: blur(100px);
+            opacity: 0.3;
         }
 
-        .remove-btn:active {
-            transform: scale(0.9);
+        .glow-1 { top: -10%; right: -10%; width: 450px; height: 450px; background: #6366f1; }
+        .glow-2 { bottom: 0%; left: -10%; width: 400px; height: 400px; background: #ec4899; }
+        .glow-3 { top: 40%; right: 25%; width: 300px; height: 300px; background: #06b6d4; }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
         }
 
-        textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 14px;
+        .glass-input {
+            background: rgba(10, 15, 26, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: #fff;
-            resize: none;
-            font-size: 0.95rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .glass-input:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
             outline: none;
-            margin-bottom: 1.2rem;
-            transition: border-color 0.3s;
         }
 
-        textarea:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0,242,254,0.1);
+        /* iOS Input Fixes */
+        input, textarea, button {
+            font-family: inherit;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
-        .post-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #0a0b10;
-            font-weight: 800;
-            font-size: 1.05rem;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,242,254,0.3);
-            transition: transform 0.2s, opacity 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .post-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Feed Card Styles */
-        .feed-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1rem;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(247,37,133,0.3);
-        }
-
-        .media-slider {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            margin: 1rem 0;
-            padding-bottom: 10px;
-        }
-
-        .media-slider::-webkit-scrollbar {
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
             height: 6px;
         }
-
-        .media-slider::-webkit-scrollbar-thumb {
-            background: var(--accent-cyan);
-            border-radius: 10px;
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 4px;
         }
 
-        .media-box {
-            flex: 0 0 100%;
-            scroll-snap-align: start;
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #000;
-            max-height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--glass-border);
+        /* Toast Popup Animation */
+        .toast-enter {
+            transform: translateY(100%) scale(0.9);
+            opacity: 0;
         }
-
-        .media-box img, .media-box video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            max-height: 500px;
-        }
-
-        .download-btn {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(10, 11, 16, 0.85);
-            backdrop-filter: blur(10px);
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 5px 20px rgba(0,242,254,0.25);
-            transition: all 0.2s;
-        }
-
-        .download-btn:active {
-            background: var(--accent-cyan);
-            color: #0a0b10;
-        }
-
-        .post-caption {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            word-break: break-word;
-        }
-
-        .post-actions {
-            display: flex;
-            gap: 20px;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 12px;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .action-btn.liked {
-            color: var(--accent-pink);
-        }
-
-        .action-btn:hover {
-            color: var(--text-main);
-        }
-
-        #fileInput {
-            display: none;
+        .toast-show {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
     </style>
 </head>
-<body>
+<body class="text-gray-100 flex flex-col min-h-screen">
 
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <i class="fa-solid fa-bolt"></i> MediaSphere
+    <div class="ambient-bg">
+        <div class="glow-orb glow-1"></div>
+        <div class="glow-orb glow-2"></div>
+        <div class="glow-orb glow-3"></div>
+    </div>
+
+    <header class="sticky top-0 z-40 w-full glass-card border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-xl">
+        <div class="max-w-5xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
+            
+            <!-- Logo Section -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToTop()">
+                <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-brand-500 via-brand-neon to-brand-accent p-0.5 animate-pulse-glow flex items-center justify-center">
+                    <div class="w-full h-full bg-gray-950 rounded-[14px] flex items-center justify-center">
+                        <i class="fa-solid fa-photo-film text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-accent text-lg sm:text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-white via-indigo-200 to-pink-400 bg-clip-text text-transparent">MediaSphere</span>
+                </div>
             </div>
+
+            <!-- Header Action Button -->
+            <button onclick="scrollToUpload()" class="px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-lg shadow-indigo-500/20 active:scale-95">
+                <i class="fa-solid fa-plus-circle text-base"></i>
+                <span>פרסם מדיה</span>
+            </button>
         </div>
     </header>
 
-    <div class="main-container">
-        
-        <!-- Upload Card -->
-        <div class="upload-card">
-            <input type="file" id="fileInput" multiple accept="image/*,video/*">
-            
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div class="upload-icon">
-                    <i class="fa-solid fa-photo-film"></i>
-                </div>
-                <h3>בחר סרטונים או תמונות מהגלריה</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">תומך בעד 5 קבצים בו-זמנית</p>
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 space-y-8">
+
+        <!-- Upload Form Container -->
+        <section id="uploadSection" class="glass-card rounded-3xl p-5 sm:p-7 border border-brand-500/30 relative">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-base sm:text-lg font-bold flex items-center gap-2 text-white">
+                    <i class="fa-solid fa-cloud-arrow-up text-brand-cyan"></i>
+                    יצירת פוסט חדש
+                </h2>
+                <span class="text-xs text-indigo-300 bg-indigo-950/80 px-2.5 py-1 rounded-full border border-indigo-500/30 font-medium" id="fileCounterText">0/5 קבצים</span>
             </div>
 
-            <div class="previews-grid" id="previewsGrid"></div>
-
-            <textarea id="captionInput" rows="2" placeholder="מה תרצה לכתוב על הפוסט? #מדיה"></textarea>
-            
-            <button class="post-btn" onclick="createPost()">
-                <i class="fa-solid fa-paper-plane"></i> פרסם לכולם באתר
-            </button>
-        </div>
-
-        <!-- Feed List -->
-        <div id="feedList">
-            <!-- Sample Post -->
-            <div class="feed-item">
-                <div class="post-header">
-                    <div class="avatar" style="background: linear-gradient(45deg, #00f2fe, #4facfe);">M</div>
+            <!-- Tap/Drag to Select Input Area -->
+            <div id="dropZone" onclick="triggerFileInput()" 
+                 class="border-2 border-dashed border-gray-700 hover:border-brand-500/80 rounded-2xl p-6 sm:p-8 text-center cursor-pointer bg-gray-900/50 hover:bg-gray-900/80 transition-all duration-300 relative">
+                
+                <!-- Explicit file input optimized for Mobile & Desktop -->
+                <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
+                
+                <div class="flex flex-col items-center justify-center gap-3 pointer-events-none">
+                    <div class="w-14 h-14 rounded-2xl bg-brand-500/20 flex items-center justify-center text-brand-cyan">
+                        <i class="fa-solid fa-images text-2xl"></i>
+                    </div>
                     <div>
-                        <div style="font-weight: 700; font-size: 0.95rem;">MediaSphere Team</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">לפני דקה</div>
+                        <p class="text-sm sm:text-base font-bold text-gray-200">
+                            לחץ כאן לבחירת תמונות/סרטונים מהגלריה
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            תומך ב-MP4, MOV, PNG, JPG, GIF (עד 5 קבצים בלבד)
+                        </p>
                     </div>
                 </div>
-                <div class="post-caption">ברוכים הבאים לפלטפורמה המטורפת ביותר לשיתוף מדיה! העלו סרטונים ותמונות, שמרו בלחיצה אחת מכל מכשיר 🚀🔥</div>
-                <div class="post-actions">
-                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> <span>24</span></button>
-                    <button class="action-btn"><i class="fa-regular fa-comment"></i> תגובות</button>
-                </div>
             </div>
+
+            <!-- Preview Grid for Selected Media Items -->
+            <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-4 hidden"></div>
+
+            <!-- Post Textarea -->
+            <div class="mt-4">
+                <textarea id="postDescription" rows="3" placeholder="כתוב תיאור לפוסט שלך..."
+                          class="w-full glass-input rounded-2xl p-4 text-sm placeholder-gray-500 resize-none focus:ring-2 focus:ring-brand-500"></textarea>
+            </div>
+
+            <!-- Form Buttons -->
+            <div class="mt-4 flex items-center justify-end gap-3">
+                <button onclick="clearUploadForm()" class="px-4 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium text-xs sm:text-sm transition-all">
+                    איפוס
+                </button>
+                <button id="publishBtn" onclick="publishPost()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 via-brand-neon to-brand-accent font-bold text-xs sm:text-sm text-white shadow-lg shadow-indigo-500/25 active:scale-95 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    פרסם בפיד
+                </button>
+            </div>
+        </section>
+
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <div class="flex items-center gap-2">
+                <button onclick="filterType('all')" id="tab-all" class="filter-tab px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-brand-500 text-white shadow">
+                    הכל
+                </button>
+                <button onclick="filterType('image')" id="tab-image" class="filter-tab px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all">
+                    תמונות
+                </button>
+                <button onclick="filterType('video')" id="tab-video" class="filter-tab px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all">
+                    סרטונים
+                </button>
+            </div>
+            <span id="postsCount" class="text-xs font-semibold text-gray-400">0 פוסטים בפיד</span>
         </div>
 
-    </div>
+        <section id="postsFeed" class="space-y-6">
+            <!-- Posts render dynamically here -->
+        </section>
+
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 left-5 sm:left-auto sm:w-80 z-50 space-y-3 pointer-events-none"></div>
+
+    <footer class="mt-auto border-t border-gray-800/80 glass-card py-6 text-center text-xs text-gray-400">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div>
+                <span class="font-bold text-gray-200">MediaSphere</span> &copy; 2026 - שיתוף מדיה מהיר ונקי
+            </div>
+            <p>מותאם באופן מלא ל-iOS, Android ומחשבים אישיים</p>
+        </div>
+    </footer>
 
     <script>
+        /* Selected Files Queue */
         let selectedFiles = [];
-        const fileInput = document.getElementById('fileInput');
-        const previewsGrid = document.getElementById('previewsGrid');
-        const feedList = document.getElementById('feedList');
+        let currentFilter = 'all';
 
-        // Handles file selection cleanly for PC and mobile (iOS/Android)
-        fileInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            if (!files.length) return;
+        /* LocalStorage Persistence Key */
+        const STORAGE_KEY = 'mediasphere_user_posts_v1';
+
+        /* Load stored user posts or start empty */
+        let posts = loadPostsFromStorage();
+
+        window.onload = function() {
+            renderPosts();
+            setupDragAndDrop();
+        };
+
+        function triggerFileInput() {
+            document.getElementById('fileInput').click();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToUpload() {
+            const el = document.getElementById('uploadSection');
+            el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function loadPostsFromStorage() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error("Storage load error:", e);
+                return [];
+            }
+        }
+
+        function savePostsToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+            } catch (e) {
+                showToast('אזהרה: הקבצים גדולים מדי לשמירה קבועה בדפדפן', 'error');
+            }
+        }
+
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files || (e.dataTransfer ? e.dataTransfer.files : []));
             
             if (selectedFiles.length + files.length > 5) {
-                alert('ניתן לבחור עד 5 קבצים בלבד בסך הכל!');
-                fileInput.value = '';
+                showToast('ניתן להעלות עד 5 קבצים בלבד בכל פוסט!', 'error');
                 return;
             }
 
+            let loadedCount = 0;
             files.forEach(file => {
-                if (selectedFiles.length < 5) {
-                    selectedFiles.push(file);
-                }
-            });
-
-            renderPreviews();
-        });
-
-        function renderPreviews() {
-            previewsGrid.innerHTML = '';
-            selectedFiles.forEach((file, idx) => {
-                const div = document.createElement('div');
-                div.className = 'preview-item';
-                
-                const url = URL.createObjectURL(file);
-                const isVideo = file.type.startsWith('video/');
-
-                if (isVideo) {
-                    div.innerHTML = `<video src="${url}"></video>`;
+                if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        selectedFiles.push({
+                            url: event.target.result,
+                            type: file.type.startsWith('video/') ? 'video' : 'image',
+                            name: file.name || (file.type.startsWith('video/') ? 'video.mp4' : 'photo.jpg')
+                        });
+                        loadedCount++;
+                        if (loadedCount === files.length) {
+                            updatePreviews();
+                        }
+                    };
+                    reader.readAsDataURL(file);
                 } else {
-                    div.innerHTML = `<img src="${url}">`;
+                    showToast(`הקובץ ${file.name} אינו נתמך`, 'error');
                 }
-
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'remove-btn';
-                removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                removeBtn.onclick = (event) => {
-                    event.stopPropagation();
-                    selectedFiles.splice(idx, 1);
-                    renderPreviews();
-                    // Clear file input cache so selecting same file again works
-                    if (selectedFiles.length === 0) {
-                        fileInput.value = '';
-                    }
-                };
-
-                div.appendChild(removeBtn);
-                previewsGrid.appendChild(div);
             });
         }
 
-        function createPost() {
-            const caption = document.getElementById('captionInput').value.trim();
-            if (selectedFiles.length === 0 && !caption) {
-                alert('אנא בחר לפחות קובץ אחד מהגלריה או כתוב טקסט לפוסט.');
+        function updatePreviews() {
+            const container = document.getElementById('previewContainer');
+            const counter = document.getElementById('fileCounterText');
+            
+            counter.innerText = `${selectedFiles.length}/5 קבצים`;
+
+            if (selectedFiles.length === 0) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
                 return;
             }
 
-            const postCard = document.createElement('div');
-            postCard.className = 'feed-item';
+            container.classList.remove('hidden');
+            container.innerHTML = '';
 
-            let mediaHTML = '';
-            if (selectedFiles.length > 0) {
-                mediaHTML = '<div class="media-slider">';
-                selectedFiles.forEach(file => {
-                    const url = URL.createObjectURL(file);
-                    const isVideo = file.type.startsWith('video/');
-                    const fileName = file.name || (isVideo ? 'video.mp4' : 'image.png');
-
-                    mediaHTML += `
-                        <div class="media-box">
-                            ${isVideo 
-                                ? `<video src="${url}" controls playsinline></video>` 
-                                : `<img src="${url}">`
-                            }
-                            <a href="${url}" download="${fileName}" class="download-btn">
-                                <i class="fa-solid fa-download"></i> שמור/הורד
-                            </a>
+            selectedFiles.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'relative group rounded-xl overflow-hidden aspect-square border border-gray-700 bg-gray-900 shadow-md';
+                
+                let mediaHtml = '';
+                if (item.type === 'video') {
+                    mediaHtml = `
+                        <video src="${item.url}" class="w-full h-full object-cover pointer-events-none" playsinline muted></video>
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <i class="fa-solid fa-play text-white text-lg"></i>
                         </div>
                     `;
-                });
-                mediaHTML += '</div>';
-            }
+                } else {
+                    mediaHtml = `<img src="${item.url}" class="w-full h-full object-cover">`;
+                }
 
-            postCard.innerHTML = `
-                <div class="post-header">
-                    <div class="avatar">מש</div>
-                    <div>
-                        <div style="font-weight: 700; font-size: 0.95rem;">משתמש MediaSphere</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">עכשיו</div>
-                    </div>
-                </div>
-                ${mediaHTML}
-                ${caption ? `<div class="post-caption">${caption}</div>` : ''}
-                <div class="post-actions">
-                    <button class="action-btn" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i> <span>1</span></button>
-                    <button class="action-btn"><i class="fa-regular fa-comment"></i> תגובות</button>
-                </div>
-            `;
-
-            feedList.prepend(postCard);
-
-            // Reset Form completely
-            selectedFiles = [];
-            fileInput.value = '';
-            renderPreviews();
-            document.getElementById('captionInput').value = '';
+                itemEl.innerHTML = `
+                    ${mediaHtml}
+                    <button type="button" onclick="event.stopPropagation(); removeFile(${index})" class="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs shadow active:scale-90">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+                container.appendChild(itemEl);
+            });
         }
 
-        function toggleLike(btn) {
-            btn.classList.toggle('liked');
-            const icon = btn.querySelector('i');
-            const span = btn.querySelector('span');
-            let count = parseInt(span.textContent);
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updatePreviews();
+        }
 
-            if (btn.classList.contains('liked')) {
-                icon.className = 'fa-solid fa-heart';
-                span.textContent = count + 1;
-            } else {
-                icon.className = 'fa-regular fa-heart';
-                span.textContent = count - 1;
+        function clearUploadForm() {
+            selectedFiles = [];
+            document.getElementById('fileInput').value = '';
+            document.getElementById('postDescription').value = '';
+            updatePreviews();
+        }
+
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('dropZone');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                handleFileSelect(e);
+            }, false);
+        }
+
+        function publishPost() {
+            const description = document.getElementById('postDescription').value.trim();
+
+            if (selectedFiles.length === 0 && !description) {
+                showToast('יש להוסיף קובץ מדיה או לכתוב תיאור!', 'error');
+                return;
             }
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }) + ' - ' + now.toLocaleDateString('he-IL');
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                time: timeStr,
+                description: description,
+                media: selectedFiles.map(f => ({
+                    type: f.type,
+                    url: f.url,
+                    name: f.name
+                }))
+            };
+
+            posts.unshift(newPost);
+            savePostsToStorage();
+            renderPosts();
+            clearUploadForm();
+            showToast('הפוסט פורסם בהצלחה!', 'success');
+        }
+
+        function deletePost(postId) {
+            posts = posts.filter(p => p.id !== postId);
+            savePostsToStorage();
+            renderPosts();
+            showToast('הפוסט שנבחר נמחק מהפיד', 'info');
+        }
+
+        function renderPosts() {
+            const feed = document.getElementById('postsFeed');
+            feed.innerHTML = '';
+
+            let filtered = posts.filter(post => {
+                if (currentFilter === 'all') return true;
+                return post.media.some(m => m.type === currentFilter);
+            });
+
+            document.getElementById('postsCount').innerText = `${filtered.length} פוסטים בפיד`;
+
+            if (filtered.length === 0) {
+                feed.innerHTML = `
+                    <div class="glass-card rounded-3xl p-10 text-center text-gray-400">
+                        <i class="fa-solid fa-photo-film text-4xl mb-3 text-brand-neon opacity-80"></i>
+                        <p class="text-base font-bold text-gray-200">אין פוסטים בפיד כרגע</p>
+                        <p class="text-xs text-gray-400 mt-1">היה הראשון להעלות תמונה או סרטון בלחיצה למעלה!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(post => {
+                const postCard = document.createElement('article');
+                postCard.className = 'glass-card rounded-3xl overflow-hidden border border-gray-800/80';
+
+                // Header with Delete Button
+                let html = `
+                    <div class="p-4 sm:p-5 flex items-center justify-between border-b border-gray-800/50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-500 to-brand-accent flex items-center justify-center font-bold text-white text-xs">
+                                MS
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xs sm:text-sm text-white">פורסם במדיה-ספיר</h3>
+                                <p class="text-[11px] text-gray-400">${post.time}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Real Delete Button -->
+                        <button onclick="deletePost('${post.id}')" title="מחק פוסט" class="px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-semibold text-xs flex items-center gap-1.5 transition-all active:scale-95">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>מחק</span>
+                        </button>
+                    </div>
+                `;
+
+                // Description Text
+                if (post.description) {
+                    html += `<div class="px-5 py-3 text-sm text-gray-200 leading-relaxed">${formatHashtags(post.description)}</div>`;
+                }
+
+                // Media List Output
+                if (post.media && post.media.length > 0) {
+                    html += renderMediaList(post.media);
+                }
+
+                postCard.innerHTML = html;
+                feed.appendChild(postCard);
+            });
+        }
+
+        function renderMediaList(mediaList) {
+            const count = mediaList.length;
+            let layoutClass = 'grid-cols-1';
+            if (count === 2) layoutClass = 'grid-cols-2';
+            if (count >= 3) layoutClass = 'grid-cols-1 sm:grid-cols-3';
+
+            let mediaItemsHtml = mediaList.map((item) => {
+                const isVideo = item.type === 'video';
+                return `
+                    <div class="relative group rounded-2xl overflow-hidden bg-black/70 aspect-video sm:aspect-square flex items-center justify-center border border-gray-800/80">
+                        ${isVideo ? `
+                            <video controls playsinline class="w-full h-full object-cover">
+                                <source src="${item.url}">
+                                הדפדפן אינו תומך בווידאו.
+                            </video>
+                        ` : `
+                            <img src="${item.url}" loading="lazy" class="w-full h-full object-cover">
+                        `}
+                        
+                        <!-- Individual Download Button per media file -->
+                        <button onclick="downloadMediaFile('${item.url}', '${item.name}')" 
+                                title="שמור קובץ למכשיר"
+                                class="absolute top-2.5 left-2.5 bg-gray-950/80 hover:bg-brand-500 text-white px-3 py-1.5 rounded-xl backdrop-blur-md transition-all shadow-md border border-white/10 text-xs font-bold flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-download"></i>
+                            <span>שמור</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            return `<div class="grid ${layoutClass} gap-2.5 p-3 bg-gray-950/50">${mediaItemsHtml}</div>`;
+        }
+
+        function formatHashtags(text) {
+            return text.replace(/#(\w+|[\u0590-\u05FF]+)/g, '<span class="text-brand-cyan font-semibold">#$1</span>');
+        }
+
+        function downloadMediaFile(fileUrl, fileName) {
+            showToast('מתחיל שמירת קובץ למכשיר...', 'info');
+
+            try {
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = fileName || 'media-sphere-file';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast('הקובץ יורד למכשיר!', 'success');
+            } catch (err) {
+                showToast('שגיאה בביצוע ההורדה', 'error');
+            }
+        }
+
+        function filterType(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-tab').forEach(btn => {
+                btn.className = 'filter-tab px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all';
+            });
+            const activeTab = document.getElementById(`tab-${type}`);
+            if (activeTab) {
+                activeTab.className = 'filter-tab px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-brand-500 text-white shadow';
+            }
+            renderPosts();
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-gray-900 border-brand-cyan text-brand-cyan';
+            let icon = 'fa-circle-info';
+
+            if (type === 'success') {
+                bgClass = 'bg-gray-900 border-emerald-500 text-emerald-400';
+                icon = 'fa-circle-check';
+            } else if (type === 'error') {
+                bgClass = 'bg-gray-900 border-rose-500 text-rose-400';
+                icon = 'fa-triangle-exclamation';
+            }
+
+            toast.className = `toast-enter p-3.5 rounded-2xl border shadow-2xl glass-card flex items-center gap-2.5 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span class="text-xs font-semibold text-gray-100 flex-1">${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('toast-show'), 10);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
     </script>
 </body>
