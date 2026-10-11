@@ -1,814 +1,414 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl" class="dark">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaSphere - השראה בתנועה</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>MediaSphere - השחלת מדיה ושיתוף</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f3ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            accent: '#ec4899',
-                            cyan: '#06b6d4',
-                            neon: '#a855f7'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Heebo', 'Outfit', 'sans-serif'],
-                    },
-                    animation: {
-                        'pulse-glow': 'pulseGlow 3s infinite alternate',
-                        'float': 'float 6s ease-in-out infinite',
-                        'gradient-x': 'gradientX 8s ease infinite',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.4)' },
-                            '100%': { boxShadow: '0 0 35px rgba(236, 72, 153, 0.7)' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' }
-                        },
-                        gradientX: {
-                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
-                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' }
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
+        :root {
+            --bg-main: #0a0b10;
+            --glass-bg: rgba(18, 20, 29, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #00f2fe;
+            --accent-purple: #4facfe;
+            --accent-pink: #f72585;
+            --text-main: #ffffff;
+            --text-muted: #8a8f9d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: 'Heebo', sans-serif;
-            background: #0b0f19;
-            color: #f3f4f6;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(247, 37, 133, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
         }
 
-        /* Ambient background dynamic lights */
-        .ambient-bg {
-            position: fixed;
+        header {
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(10, 11, 16, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
         }
 
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.35;
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .glow-1 { top: -10%; right: -10%; width: 500px; height: 500px; background: #6366f1; }
-        .glow-2 { bottom: 10%; left: -10%; width: 450px; height: 450px; background: #ec4899; }
-        .glow-3 { top: 40%; right: 30%; width: 350px; height: 350px; background: #06b6d4; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(17, 24, 39, 0.7);
+        .logo i {
+            color: var(--accent-cyan);
+            -webkit-text-fill-color: initial;
+        }
+
+        .main-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 1rem 5rem 1rem;
+        }
+
+        .upload-card {
+            background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .glass-card-interactive {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            margin-bottom: 1rem;
         }
 
-        .glass-card-interactive:hover {
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px 0 rgba(168, 85, 247, 0.25);
+        .upload-area:active, .upload-area.dragover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 242, 254, 0.05);
         }
 
-        .glass-input {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .previews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .preview-item img, .preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: #ff4757;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
             color: #fff;
-            backdrop-filter: blur(8px);
-        }
-
-        .glass-input:focus {
-            border-color: #a855f7;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+            resize: none;
+            font-size: 0.95rem;
             outline: none;
+            margin-bottom: 1rem;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #374151;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
+        textarea:focus {
+            border-color: var(--accent-cyan);
         }
 
-        /* Toast Popup Animation */
-        .toast-enter {
-            transform: translateY(100%) scale(0.9);
-            opacity: 0;
-        }
-        .toast-show {
-            transform: translateY(0) scale(1);
-            opacity: 1;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .post-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-purple));
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
         }
 
-        /* Like Bounce animation */
-        @keyframes heartPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.35); }
-            100% { transform: scale(1); }
+        .post-btn:active {
+            transform: scale(0.98);
         }
-        .animate-heart {
-            animation: heartPulse 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        /* Feed Styles */
+        .feed-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .media-slider {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            margin: 1rem 0;
+            padding-bottom: 8px;
+        }
+
+        .media-slider::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .media-slider::-webkit-scrollbar-thumb {
+            background: var(--accent-cyan);
+            border-radius: 10px;
+        }
+
+        .media-box {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            max-height: 450px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .media-box img, .media-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            max-height: 450px;
+        }
+
+        .download-btn {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .download-btn:active {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        .post-caption {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Hidden Input */
+        #fileInput {
+            display: none;
         }
     </style>
 </head>
-<body class="text-gray-100 flex flex-col min-h-screen">
+<body>
 
-    <!-- Ambient Glowing Background -->
-    <div class="ambient-bg">
-        <div class="glow-orb glow-1"></div>
-        <div class="glow-orb glow-2"></div>
-        <div class="glow-orb glow-3"></div>
-    </div>
-
-    <header class="sticky top-0 z-40 w-full glass-card border-b border-gray-800/60 bg-gray-900/80 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            
-            <!-- Logo Section -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToTop()">
-                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-500 via-brand-neon to-brand-accent p-0.5 animate-pulse-glow flex items-center justify-center shadow-lg">
-                    <div class="w-full h-full bg-gray-950 rounded-[14px] flex items-center justify-center">
-                        <i class="fa-solid font-black fa-photo-film text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-accent text-xl"></i>
-                    </div>
-                </div>
-                <div>
-                    <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-white via-indigo-200 to-pink-400 bg-clip-text text-transparent">MediaSphere</span>
-                    <span class="hidden sm:inline-block text-xs text-brand-cyan font-semibold mr-2 px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30">ישראל 🚀</span>
-                </div>
-            </div>
-
-            <!-- Search Bar (Desktop) -->
-            <div class="hidden md:flex items-center flex-1 max-w-md mx-8 relative">
-                <i class="fa-solid fa-magnifying-glass absolute right-4 text-gray-400"></i>
-                <input type="text" id="searchInput" onkeyup="filterPosts()" placeholder="חפש תיאורים, תגיות או משתמשים..." class="w-full glass-input pr-11 pl-4 py-2.5 rounded-full text-sm placeholder-gray-400 transition-all">
-            </div>
-
-            <!-- Header Actions -->
-            <div class="flex items-center gap-3">
-                <button onclick="openUploadModal()" class="relative group overflow-hidden rounded-xl p-[2px] font-bold text-sm">
-                    <span class="absolute inset-0 bg-gradient-to-r from-brand-500 via-brand-neon to-brand-accent animate-gradient-x"></span>
-                    <div class="px-4 py-2.5 rounded-[10px] bg-gray-950 group-hover:bg-opacity-0 transition-all duration-300 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-cloud-arrow-up text-brand-cyan group-hover:text-white text-base"></i>
-                        <span class="hidden sm:inline">העלה תוכן</span>
-                        <span class="sm:hidden">העלה</span>
-                    </div>
-                </button>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-circle-nodes"></i> MediaSphere
             </div>
         </div>
     </header>
 
-    <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6 sm:py-10 space-y-8">
-
-        <!-- Hero Welcome Banner -->
-        <section class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden text-center sm:text-right flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="absolute -left-12 -bottom-12 w-48 h-48 bg-brand-neon/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="space-y-3 z-10 max-w-xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    פלטפורמת המדיה הכי חמה
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-                    שתף את הרגעים שלך עם <span class="bg-gradient-to-r from-brand-cyan via-indigo-400 to-pink-500 bg-clip-text text-transparent">כולם בלחיצה אחת!</span>
-                </h1>
-                <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-                    מעלים עד 5 תמונות וסרטונים בבת אחת, מוסיפים טקסט מגניב וכל המשתמשים יכולים לצפות ולשמור ישירות לטלפון או למחשב בכל איכות!
-                </p>
-            </div>
+    <div class="main-container">
+        
+        <!-- Upload Card -->
+        <div class="upload-card">
+            <!-- accept="image/*,video/*" ensures gallery option opens on phones -->
+            <input type="file" id="fileInput" multiple accept="image/*,video/*">
             
-            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto z-10 shrink-0">
-                <button onclick="openUploadModal()" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-accent hover:opacity-90 font-bold text-white shadow-lg shadow-indigo-500/30 transition-all flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-plus-circle text-lg"></i>
-                    פרסם פוסט חדש
-                </button>
-            </div>
-        </section>
-
-        <section id="quickUploadSection" class="glass-card rounded-3xl p-6 border border-brand-500/20 shadow-2xl relative">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold flex items-center gap-2 text-white">
-                    <i class="fa-solid fa-sparkles text-brand-neon"></i>
-                    יצירת פוסט חדש (עד 5 קבצים)
-                </h2>
-                <span class="text-xs text-gray-400 font-medium" id="fileCounterText">0/5 קבצים נבחרו</span>
-            </div>
-
-            <!-- Drag and Drop Box -->
-            <div id="dropZone" onclick="document.getElementById('fileInput').click()" 
-                 class="border-2 border-dashed border-gray-700 hover:border-brand-500/80 rounded-2xl p-6 sm:p-8 text-center cursor-pointer bg-gray-900/40 hover:bg-gray-900/70 transition-all duration-300 group relative">
-                
-                <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
-                
-                <div class="flex flex-col items-center justify-center gap-3">
-                    <div class="w-16 h-16 rounded-full bg-gray-800/80 group-hover:bg-brand-500/20 flex items-center justify-center text-gray-400 group-hover:text-brand-cyan transition-all transform group-hover:scale-110">
-                        <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-base font-semibold text-gray-200 group-hover:text-white">
-                            גרור לכאן תמונות או סרטונים, או <span class="text-brand-cyan underline">לחץ לבחירה</span>
-                        </p>
-                        <p class="text-xs text-gray-400 mt-1">
-                            תומך ב-MP4, WebM, PNG, JPG, GIF (עד 5 קבצים ביחד)
-                        </p>
-                    </div>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
                 </div>
+                <h3>לחץ לבחירה מהגלריה</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">תמונות או סרטונים (עד 5 קבצים)</p>
             </div>
 
-            <!-- Selected Media Previews Container -->
-            <div id="previewContainer" class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-4 hidden"></div>
+            <div class="previews-grid" id="previewsGrid"></div>
 
-            <!-- Description Textarea -->
-            <div class="mt-4">
-                <textarea id="postDescription" rows="3" placeholder="מה המצב? הוסף תיאור לסרטון/תמונה, האשטאגים (#מגניב) או הקדשה..."
-                          class="w-full glass-input rounded-2xl p-4 text-sm placeholder-gray-500 resize-none focus:ring-2 focus:ring-brand-500"></textarea>
-            </div>
-
-            <!-- Submit Action -->
-            <div class="mt-4 flex items-center justify-end gap-3">
-                <button onclick="clearUploadForm()" class="px-5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium text-sm transition-all">
-                    אפס הכל
-                </button>
-                <button id="publishBtn" onclick="publishPost()" class="px-7 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 via-brand-neon to-brand-accent hover:opacity-95 font-bold text-white shadow-lg shadow-indigo-500/30 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    פרסם עכשיו באתר!
-                </button>
-            </div>
-        </section>
-
-        <!-- Stream Filter Tabs -->
-        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-            <div class="flex items-center gap-2">
-                <button onclick="filterType('all')" id="tab-all" class="filter-tab px-4 py-2 rounded-xl text-sm font-bold bg-brand-500 text-white shadow-md">
-                    הכל
-                </button>
-                <button onclick="filterType('video')" id="tab-video" class="filter-tab px-4 py-2 rounded-xl text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all">
-                    <i class="fa-solid fa-video ml-1.5 text-pink-400"></i>סרטונים
-                </button>
-                <button onclick="filterType('image')" id="tab-image" class="filter-tab px-4 py-2 rounded-xl text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all">
-                    <i class="fa-solid fa-image ml-1.5 text-cyan-400"></i>תמונות
-                </button>
-            </div>
-            <span id="postsCount" class="text-xs font-semibold text-gray-400">מציג 4 פוסטים</span>
+            <textarea id="captionInput" rows="2" placeholder="כתוב משהו על הסרטון/התמונה..."></textarea>
+            
+            <button class="post-btn" onclick="createPost()">
+                <i class="fa-solid fa-paper-plane"></i> פרסם באתר
+            </button>
         </div>
 
-        <section id="postsFeed" class="space-y-6">
-            <!-- Posts will be generated dynamically here -->
-        </section>
+        <!-- Feed Section -->
+        <div id="feedList"></div>
 
-    </main>
-
-    <div id="toastContainer" class="fixed bottom-5 right-5 left-5 sm:left-auto sm:w-96 z-50 space-y-3 pointer-events-none"></div>
-
-    <!-- Floating Action Button for Mobile -->
-    <button onclick="scrollToUpload()" class="sm:hidden fixed bottom-6 left-6 z-30 w-14 h-14 rounded-full bg-gradient-to-tr from-brand-500 to-brand-accent text-white shadow-2xl shadow-indigo-500/50 flex items-center justify-center text-xl animate-bounce">
-        <i class="fa-solid fa-plus"></i>
-    </button>
-
-    <!-- Footer -->
-    <footer class="mt-auto border-t border-gray-800/60 glass-card py-6 text-center text-xs text-gray-500">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-                <span class="font-bold text-gray-300">MediaSphere</span> &copy; 2026 - הפלטפורמה המובילה לשיתוף מדיה
-            </div>
-            <p>נוצר באהבה עבור החוויות הכי טובות שלך ❤️</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        /* State Variables */
         let selectedFiles = [];
-        let currentFilter = 'all';
+        const fileInput = document.getElementById('fileInput');
+        const previewsGrid = document.getElementById('previewsGrid');
+        const feedList = document.getElementById('feedList');
 
-        // Initial sample data with valid working videos and images
-        let posts = [
-            {
-                id: 'post-1',
-                author: 'עומרי דרור',
-                avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
-                time: 'לפני 15 דקות',
-                description: 'צלילה מטורפת עם דולפינים באילת! 🌊🐬 פשוט חוויה של פעם בחיים. מוזמנים להוריד ולשתף!',
-                media: [
-                    {
-                        type: 'video',
-                        url: 'https://assets.mixkit.co/videos/preview/mixkit-dolphins-swimming-under-water-42938-large.mp4',
-                        name: 'dolphin-diving-eilat.mp4'
-                    },
-                    {
-                        type: 'image',
-                        url: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=80',
-                        name: 'underwater-scenery.jpg'
-                    }
-                ],
-                likes: 142,
-                liked: false,
-                comments: [
-                    { author: 'נועה', text: 'מדהים! איזה איכות 🤩' },
-                    { author: 'איתי', text: 'איפה זה בצפון?' }
-                ]
-            },
-            {
-                id: 'post-2',
-                author: 'גל שרון',
-                avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-                time: 'לפני שעה',
-                description: 'שקיעה מהממת בחף ראש הנקרה 🌅 צולם בטלפון ב-4K! תורידו חופשי רקע לנייד.',
-                media: [
-                    {
-                        type: 'image',
-                        url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80',
-                        name: 'sunset-view-4k.jpg'
-                    }
-                ],
-                likes: 89,
-                liked: true,
-                comments: []
-            },
-            {
-                id: 'post-3',
-                author: 'מיכל אהרוני',
-                avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-                time: 'לפני 3 שעות',
-                description: 'סרטון קצר מההופעה אתמול בלילה 🎸⚡ האנרגיה הייתה מטורפת!',
-                media: [
-                    {
-                        type: 'video',
-                        url: 'https://assets.mixkit.co/videos/preview/mixkit-rock-band-performing-on-stage-40348-large.mp4',
-                        name: 'rock-concert-night.mp4'
-                    }
-                ],
-                likes: 210,
-                liked: false,
-                comments: [
-                    { author: 'דניאל', text: 'וואו הייתי שם!! 🎸' }
-                ]
-            }
-        ];
-
-        window.onload = function() {
-            renderPosts();
-            setupDragAndDrop();
-        };
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function scrollToUpload() {
-            const el = document.getElementById('quickUploadSection');
-            el.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function handleFileSelect(e) {
-            const files = Array.from(e.target.files || e.dataTransfer.files);
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
             
             if (selectedFiles.length + files.length > 5) {
-                showToast('ניתן להעלות עד 5 קבצים בלבד בכל פוסט!', 'error');
+                alert('ניתן להעלות עד 5 קבצים בלבד בכל פעם!');
                 return;
             }
 
             files.forEach(file => {
-                if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        selectedFiles.push({
-                            file: file,
-                            url: event.target.result,
-                            type: file.type.startsWith('video/') ? 'video' : 'image',
-                            name: file.name
-                        });
-                        updatePreviews();
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    showToast(`הקובץ ${file.name} אינו תמונה או סרטון נתמך`, 'error');
+                if (selectedFiles.length < 5) {
+                    selectedFiles.push(file);
                 }
             });
-        }
 
-        function updatePreviews() {
-            const container = document.getElementById('previewContainer');
-            const counter = document.getElementById('fileCounterText');
-            
-            counter.innerText = `${selectedFiles.length}/5 קבצים נבחרו`;
+            renderPreviews();
+            fileInput.value = ''; // Reset input
+        });
 
-            if (selectedFiles.length === 0) {
-                container.classList.add('hidden');
-                container.innerHTML = '';
-                return;
-            }
-
-            container.classList.remove('hidden');
-            container.innerHTML = '';
-
-            selectedFiles.forEach((item, index) => {
-                const itemEl = document.createElement('div');
-                itemEl.className = 'relative group rounded-xl overflow-hidden aspect-square border border-gray-700 bg-gray-900 shadow-md';
+        function renderPreviews() {
+            previewsGrid.innerHTML = '';
+            selectedFiles.forEach((file, idx) => {
+                const div = document.createElement('div');
+                div.className = 'preview-item';
                 
-                let mediaHtml = '';
-                if (item.type === 'video') {
-                    mediaHtml = `<video src="${item.url}" class="w-full h-full object-cover pointer-events-none"></video>
-                                 <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
-                                     <i class="fa-solid fa-circle-play text-white/80 text-xl"></i>
-                                 </div>`;
+                const url = URL.createObjectURL(file);
+                const isVideo = file.type.startsWith('video/');
+
+                if (isVideo) {
+                    div.innerHTML = `<video src="${url}"></video>`;
                 } else {
-                    mediaHtml = `<img src="${item.url}" class="w-full h-full object-cover">`;
+                    div.innerHTML = `<img src="${url}">`;
                 }
 
-                itemEl.innerHTML = `
-                    ${mediaHtml}
-                    <button onclick="removeFile(${index})" class="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-red-600/80 hover:bg-red-600 text-white flex items-center justify-center text-xs transition-all shadow">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                `;
-                container.appendChild(itemEl);
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                removeBtn.onclick = () => {
+                    selectedFiles.splice(idx, 1);
+                    renderPreviews();
+                };
+
+                div.appendChild(removeBtn);
+                previewsGrid.appendChild(div);
             });
         }
 
-        function removeFile(index) {
-            selectedFiles.splice(index, 1);
-            updatePreviews();
-        }
-
-        function clearUploadForm() {
-            selectedFiles = [];
-            document.getElementById('fileInput').value = '';
-            document.getElementById('postDescription').value = '';
-            updatePreviews();
-        }
-
-        /* Drag & Drop logic */
-        function setupDragAndDrop() {
-            const dropZone = document.getElementById('dropZone');
-
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.add('border-brand-500', 'bg-gray-800/80'), false);
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-brand-500', 'bg-gray-800/80'), false);
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                handleFileSelect(e);
-            }, false);
-        }
-
-        function publishPost() {
-            const description = document.getElementById('postDescription').value.trim();
-
-            if (selectedFiles.length === 0 && !description) {
-                showToast('יש להוסיף לפחות קובץ מדיה אחד או תיאור פוסט!', 'error');
+        function createPost() {
+            const caption = document.getElementById('captionInput').value;
+            if (selectedFiles.length === 0 && !caption.trim()) {
+                alert('יש להעלות לפחות קובץ אחד או לכתוב טקסט.');
                 return;
             }
 
-            const newPost = {
-                id: 'post-' + Date.now(),
-                author: 'משתמש אורח',
-                avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-                time: 'עכשיו',
-                description: description,
-                media: selectedFiles.map(f => ({
-                    type: f.type,
-                    url: f.url,
-                    name: f.name || (f.type === 'video' ? 'media-video.mp4' : 'media-photo.jpg')
-                })),
-                likes: 0,
-                liked: false,
-                comments: []
-            };
+            const postCard = document.createElement('div');
+            postCard.className = 'feed-item';
 
-            posts.unshift(newPost);
-            renderPosts();
-            clearUploadForm();
-            showToast('הפוסט פורסם בהצלחה לכל האתר! 🎉', 'success');
-        }
+            let mediaHTML = '';
+            if (selectedFiles.length > 0) {
+                mediaHTML = '<div class="media-slider">';
+                selectedFiles.forEach(file => {
+                    const url = URL.createObjectURL(file);
+                    const isVideo = file.type.startsWith('video/');
+                    const fileName = file.name || (isVideo ? 'video.mp4' : 'image.png');
 
-        function renderPosts() {
-            const feed = document.getElementById('postsFeed');
-            const searchVal = document.getElementById('searchInput')?.value.toLowerCase() || '';
-
-            feed.innerHTML = '';
-
-            let filtered = posts.filter(post => {
-                const matchesSearch = post.description.toLowerCase().includes(searchVal) || post.author.toLowerCase().includes(searchVal);
-                if (currentFilter === 'all') return matchesSearch;
-                const hasType = post.media.some(m => m.type === currentFilter);
-                return matchesSearch && hasType;
-            });
-
-            document.getElementById('postsCount').innerText = `מציג ${filtered.length} פוסטים`;
-
-            if (filtered.length === 0) {
-                feed.innerHTML = `
-                    <div class="glass-card rounded-3xl p-12 text-center text-gray-400">
-                        <i class="fa-solid fa-photo-film text-4xl mb-3 text-brand-neon"></i>
-                        <p class="text-lg font-bold text-gray-200">לא נמצאו פוסטים</p>
-                        <p class="text-xs text-gray-400 mt-1">נסה לחפש משהו אחר או היה הראשון להעלות מדיה!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            filtered.forEach(post => {
-                const postCard = document.createElement('article');
-                postCard.className = 'glass-card glass-card-interactive rounded-3xl overflow-hidden border border-gray-800/80';
-                
-                // Author header
-                let html = `
-                    <div class="p-4 sm:p-5 flex items-center justify-between border-b border-gray-800/50">
-                        <div class="flex items-center gap-3">
-                            <img src="${post.avatar}" class="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-brand-500/50">
-                            <div>
-                                <h3 class="font-bold text-sm sm:text-base text-white">${post.author}</h3>
-                                <p class="text-xs text-gray-400">${post.time}</p>
-                            </div>
+                    mediaHTML += `
+                        <div class="media-box">
+                            ${isVideo 
+                                ? `<video src="${url}" controls></video>` 
+                                : `<img src="${url}">`
+                            }
+                            <a href="${url}" download="${fileName}" class="download-btn">
+                                <i class="fa-solid fa-download"></i> שמור/הורד
+                            </a>
                         </div>
-                        <button onclick="sharePost('${post.id}')" class="text-gray-400 hover:text-brand-cyan p-2 rounded-full hover:bg-gray-800/50 transition-all">
-                            <i class="fa-solid fa-share-nodes text-lg"></i>
-                        </button>
+                    `;
+                });
+                mediaHTML += '</div>';
+            }
+
+            postCard.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: bold;">U</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.95rem;">משתמש MediaSphere</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">עכשיו</div>
                     </div>
-                `;
-
-                // Description
-                if (post.description) {
-                    html += `<div class="px-5 py-3 text-sm sm:text-base text-gray-200 leading-relaxed">${formatTextWithTags(post.description)}</div>`;
-                }
-
-                // Media Gallery / Carousel Render
-                if (post.media && post.media.length > 0) {
-                    html += renderMediaGallery(post.media, post.id);
-                }
-
-                // Interactive Actions Bar
-                html += `
-                    <div class="p-4 sm:p-5 flex items-center justify-between border-t border-gray-800/50 bg-gray-950/30">
-                        <div class="flex items-center gap-4">
-                            <button onclick="toggleLike('${post.id}')" class="flex items-center gap-2 text-sm font-bold transition-all ${post.liked ? 'text-pink-500' : 'text-gray-400 hover:text-pink-400'}">
-                                <i class="fa-solid fa-heart text-lg ${post.liked ? 'animate-heart' : ''}"></i>
-                                <span>${post.likes}</span>
-                            </button>
-                            <button onclick="toggleComments('${post.id}')" class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-brand-cyan transition-all">
-                                <i class="fa-solid fa-comment text-lg"></i>
-                                <span>${post.comments.length}</span>
-                            </button>
-                        </div>
-
-                        <!-- Direct Download Button -->
-                        ${post.media && post.media.length > 0 ? `
-                            <button onclick="downloadMedia('${post.media[0].url}', '${post.media[0].name}')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-cyan/20 to-brand-500/20 hover:from-brand-cyan/40 hover:to-brand-500/40 text-brand-cyan border border-brand-cyan/30 font-bold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md active:scale-95">
-                                <i class="fa-solid fa-download text-sm"></i>
-                                <span>שמור קובץ למכשיר</span>
-                            </button>
-                        ` : ''}
-                    </div>
-
-                    <!-- Comments Accordion -->
-                    <div id="comments-${post.id}" class="hidden bg-gray-950/60 p-4 border-t border-gray-800/50 space-y-3">
-                        <div class="space-y-2 max-h-40 overflow-y-auto pl-1" id="commentsList-${post.id}">
-                            ${post.comments.map(c => `
-                                <div class="text-xs bg-gray-900/80 p-2.5 rounded-xl border border-gray-800">
-                                    <span class="font-bold text-brand-cyan">${c.author}:</span>
-                                    <span class="text-gray-300 mr-1">${c.text}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="flex gap-2">
-                            <input type="text" id="commentInput-${post.id}" placeholder="כתוב תגובה..." class="flex-1 glass-input rounded-xl px-3 py-1.5 text-xs">
-                            <button onclick="addComment('${post.id}')" class="px-3 py-1.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold transition-all">
-                                שלח
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                postCard.innerHTML = html;
-                feed.appendChild(postCard);
-            });
-        }
-
-        function renderMediaGallery(mediaList, postId) {
-            const count = mediaList.length;
-            let layoutClass = 'grid-cols-1';
-            if (count === 2) layoutClass = 'grid-cols-2';
-            if (count >= 3) layoutClass = 'grid-cols-2 sm:grid-cols-3';
-
-            let mediaItemsHtml = mediaList.map((item, idx) => {
-                const isVideo = item.type === 'video';
-                return `
-                    <div class="relative group rounded-2xl overflow-hidden bg-black/60 aspect-video sm:aspect-square flex items-center justify-center border border-gray-800">
-                        ${isVideo ? `
-                            <video controls class="w-full h-full object-cover">
-                                <source src="${item.url}" type="video/mp4">
-                                הדפדפן שלך אינו תומך בניגון וידאו זה.
-                            </video>
-                        ` : `
-                            <img src="${item.url}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                        `}
-                        
-                        <!-- Quick Individual Item Download Overlay Button -->
-                        <button onclick="downloadMedia('${item.url}', '${item.name}')" 
-                                title="הורד קובץ זה"
-                                class="absolute top-3 left-3 bg-gray-950/80 hover:bg-brand-500 text-white p-2.5 rounded-full backdrop-blur-md opacity-90 group-hover:opacity-100 transition-all shadow-lg border border-white/20">
-                            <i class="fa-solid fa-arrow-down-to-line text-xs"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-
-            return `<div class="grid ${layoutClass} gap-2 p-3 bg-gray-950/40">${mediaItemsHtml}</div>`;
-        }
-
-        /* Helper to highlight hashtags */
-        function formatTextWithTags(text) {
-            return text.replace(/#(\w+|[\u0590-\u05FF]+)/g, '<span class="text-brand-cyan font-semibold hover:underline cursor-pointer">#$1</span>');
-        }
-
-        
-        // Smart Browser File Download logic (supports local blobs & external files)
-        function downloadMedia(fileUrl, fileName) {
-            showToast('מתחיל בהורדת הקובץ למכשיר...', 'info');
-
-            try {
-                // If blob/base64 URL
-                if (fileUrl.startsWith('data:') || fileUrl.startsWith('blob:')) {
-                    const a = document.createElement('a');
-                    a.href = fileUrl;
-                    a.download = fileName || 'downloaded-media';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    showToast('הקובץ נשמר בהצלחה בתיקיית ההורדות! 📥', 'success');
-                    return;
-                }
-
-                // Fetch image/video as blob for clean download without redirect
-                fetch(fileUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const blobUrl = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = blobUrl;
-                        a.download = fileName || 'media-sphere-file';
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(blobUrl);
-                        document.body.removeChild(a);
-                        showToast('הקובץ נשמר בהצלחה בתיקיית ההורדות! 📥', 'success');
-                    })
-                    .catch(() => {
-                        // Fallback direct open if CORS blocks fetch
-                        const a = document.createElement('a');
-                        a.href = fileUrl;
-                        a.target = '_blank';
-                        a.download = fileName;
-                        a.click();
-                        showToast('נפתח בחלון חדש לשמירה', 'info');
-                    });
-            } catch (err) {
-                showToast('שגיאה בביצוע ההורדה', 'error');
-            }
-        }
-
-        function toggleLike(postId) {
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.liked = !post.liked;
-                post.likes += post.liked ? 1 : -1;
-                renderPosts();
-            }
-        }
-
-        function toggleComments(postId) {
-            const el = document.getElementById(`comments-${postId}`);
-            if (el) {
-                el.classList.toggle('hidden');
-            }
-        }
-
-        function addComment(postId) {
-            const input = document.getElementById(`commentInput-${postId}`);
-            const text = input.value.trim();
-            if (!text) return;
-
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.comments.push({ author: 'את/ה', text: text });
-                input.value = '';
-                renderPosts();
-                toggleComments(postId);
-            }
-        }
-
-        function sharePost(postId) {
-            const dummyUrl = window.location.href;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(dummyUrl);
-                showToast('הקישור הועתק ללוח! שתף בכיף 🔗', 'success');
-            } else {
-                showToast('הקישור מוכן לשיתוף!', 'info');
-            }
-        }
-
-        function filterType(type) {
-            currentFilter = type;
-            document.querySelectorAll('.filter-tab').forEach(btn => {
-                btn.className = 'filter-tab px-4 py-2 rounded-xl text-sm font-bold text-gray-400 hover:text-white hover:bg-gray-800 transition-all';
-            });
-            const activeTab = document.getElementById(`tab-${type}`);
-            if (activeTab) {
-                activeTab.className = 'filter-tab px-4 py-2 rounded-xl text-sm font-bold bg-brand-500 text-white shadow-md';
-            }
-            renderPosts();
-        }
-
-        function filterPosts() {
-            renderPosts();
-        }
-
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            
-            let bgClass = 'bg-gray-900 border-brand-cyan text-brand-cyan';
-            let icon = 'fa-circle-info';
-
-            if (type === 'success') {
-                bgClass = 'bg-gray-900 border-emerald-500 text-emerald-400';
-                icon = 'fa-circle-check';
-            } else if (type === 'error') {
-                bgClass = 'bg-gray-900 border-rose-500 text-rose-400';
-                icon = 'fa-triangle-exclamation';
-            }
-
-            toast.className = `toast-enter p-4 rounded-2xl border shadow-2xl glass-card flex items-center gap-3 pointer-events-auto ${bgClass}`;
-            toast.innerHTML = `
-                <i class="fa-solid ${icon} text-lg"></i>
-                <span class="text-xs sm:text-sm font-semibold text-gray-100 flex-1">${message}</span>
+                </div>
+                ${mediaHTML}
+                ${caption ? `<div class="post-caption">${caption}</div>` : ''}
             `;
 
-            container.appendChild(toast);
+            feedList.prepend(postCard);
 
-            setTimeout(() => {
-                toast.classList.add('toast-show');
-            }, 10);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(100%)';
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            // Reset Form
+            selectedFiles = [];
+            renderPreviews();
+            document.getElementById('captionInput').value = '';
         }
     </script>
 </body>
