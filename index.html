@@ -416,7 +416,7 @@
         <div class="upload-card" id="uploadCard">
             <input type="file" id="fileInput" multiple accept="image/*,video/*">
             
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <div class="upload-area" id="uploadAreaTrigger">
                 <div style="font-size: 2.8rem; color: var(--accent-cyan); margin-bottom: 10px;">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                 </div>
@@ -427,7 +427,7 @@
             <div class="previews-grid" id="previewsGrid"></div>
             <textarea id="captionInput" rows="2" placeholder="כתוב משהו על המדיה שאתה מעלה..."></textarea>
             
-            <button class="post-btn" onclick="publishPost()">
+            <button class="post-btn" id="publishBtn" onclick="publishPost()">
                 <i class="fa-solid fa-paper-plane"></i> פרסם מיד לכולם באתר
             </button>
         </div>
@@ -450,9 +450,6 @@
             <div class="modal-input-group">
                 <label>כתובת אימייל</label>
                 <input type="text" id="editEmail" disabled style="opacity: 0.6; cursor: not-allowed;">
-            </div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">
-                💡 כשאמיר או אשורי מחוברים, הם מנהלי העל של האתר עם הרשאות העלאה ומחיקה מלאות.
             </div>
             <div class="modal-actions">
                 <button class="modal-btn-save" onclick="saveProfileChanges()">שמור שינויים</button>
@@ -562,15 +559,20 @@
                 await updateProfile(currentUser, { displayName: newName });
                 alert("הפרטים עודכנו בהצלחה!");
                 closeProfileModal();
-                // Refresh top pill
                 onAuthStateChanged(auth, (u) => {});
             } catch (e) {
                 alert("שגיאה בעדכון הפרופיל: " + e.message);
             }
         };
 
-        // File Selection Handling
+        // File Selection Handling (Fixed and Optimized)
         const fileInput = document.getElementById('fileInput');
+        const uploadAreaTrigger = document.getElementById('uploadAreaTrigger');
+
+        uploadAreaTrigger.addEventListener('click', () => {
+            fileInput.click();
+        });
+
         fileInput.addEventListener('change', (e) => {
             const files = Array.from(e.target.files);
             if (!files.length) return;
@@ -585,7 +587,7 @@
                 if (selectedFiles.length < 5) selectedFiles.push(file);
             });
             renderPreviews();
-            fileInput.value = ''; // Reset input to allow selecting same file again if needed
+            fileInput.value = ''; 
         });
 
         function renderPreviews() {
@@ -618,17 +620,21 @@
                 return;
             }
 
-            const mediaList = [];
-            for (let file of selectedFiles) {
-                const base64 = await fileToBase64(file);
-                mediaList.push({
-                    type: file.type.startsWith('video/') ? 'video' : 'image',
-                    url: base64,
-                    name: file.name || 'media'
-                });
-            }
+            const publishBtn = document.getElementById('publishBtn');
+            publishBtn.disabled = true;
+            publishBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> מעלה קבצים לענן...`;
 
             try {
+                const mediaList = [];
+                for (let file of selectedFiles) {
+                    const base64 = await fileToBase64(file);
+                    mediaList.push({
+                        type: file.type.startsWith('video/') ? 'video' : 'image',
+                        url: base64,
+                        name: file.name || 'media'
+                    });
+                }
+
                 await addDoc(collection(db, "posts"), {
                     caption: caption,
                     media: mediaList,
@@ -644,7 +650,10 @@
                 loadPosts();
                 alert("הפוסט פורסם בהצלחה לכולם באתר!");
             } catch (e) {
-                alert("שגיאה בפרסום: " + e.message);
+                alert("שגיאה בפרסום (ייתכן שהקובץ גדול מדי למסד הנתונים): " + e.message);
+            } finally {
+                publishBtn.disabled = false;
+                publishBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> פרסם מיד לכולם באתר`;
             }
         };
 
