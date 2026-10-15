@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaSphere - מדיה בענן</title>
+    <title>MediaSphere - פלטפורמת המדיה המתקדמת</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-main: #0a0b10;
+            --bg-main: #07080c;
             --glass-bg: rgba(18, 20, 29, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
             --accent-cyan: #00f2fe;
@@ -43,7 +43,7 @@
             z-index: 100;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            background: rgba(10, 11, 16, 0.85);
+            background: rgba(7, 8, 12, 0.85);
             border-bottom: 1px solid var(--glass-border);
             padding: 1rem 1.5rem;
         }
@@ -77,7 +77,7 @@
             background: #fff;
             color: #333;
             border: none;
-            padding: 8px 16px;
+            padding: 9px 18px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.85rem;
@@ -96,29 +96,25 @@
         .user-pill {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             background: rgba(255,255,255,0.06);
             border: 1px solid var(--glass-border);
-            padding: 4px 12px 4px 4px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 6px 14px 6px 6px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .user-pill:hover {
+            border-color: var(--accent-cyan);
         }
 
         .user-pill img {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
-        }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #ff4757;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-right: 6px;
         }
 
         .main-container {
@@ -137,23 +133,23 @@
             padding: 1.8rem;
             margin-bottom: 2.5rem;
             box-shadow: 0 25px 50px rgba(0,0,0,0.4);
-            display: none; /* Shown only for admins */
+            display: none; 
         }
 
         .upload-area {
-            border: 2px dashed rgba(0, 242, 254, 0.3);
+            border: 2px dashed rgba(0, 242, 254, 0.4);
             border-radius: 18px;
-            padding: 2rem 1rem;
+            padding: 2.2rem 1rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            background: rgba(0, 242, 254, 0.02);
+            background: rgba(0, 242, 254, 0.03);
             margin-bottom: 1.2rem;
         }
 
         .upload-area:hover {
             border-color: var(--accent-cyan);
-            background: rgba(0, 242, 254, 0.05);
+            background: rgba(0, 242, 254, 0.08);
         }
 
         .previews-grid {
@@ -182,7 +178,7 @@
             position: absolute;
             top: 5px;
             right: 5px;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             color: #ff4757;
             border: none;
             border-radius: 50%;
@@ -199,7 +195,7 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--glass-border);
             border-radius: 14px;
-            padding: 12px;
+            padding: 14px;
             color: #fff;
             resize: none;
             font-size: 0.95rem;
@@ -213,15 +209,20 @@
 
         .post-btn {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             border: none;
             border-radius: 14px;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            color: #0a0b10;
+            color: #07080c;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 1.05rem;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(0,242,254,0.3);
+            transition: transform 0.2s;
+        }
+
+        .post-btn:active {
+            transform: scale(0.98);
         }
 
         /* Feed Item */
@@ -247,7 +248,7 @@
         .poster-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .media-box {
@@ -274,11 +275,11 @@
             position: absolute;
             bottom: 15px;
             left: 15px;
-            background: rgba(10, 11, 16, 0.85);
+            background: rgba(7, 8, 12, 0.85);
             backdrop-filter: blur(10px);
             color: var(--accent-cyan);
             border: 1px solid var(--accent-cyan);
-            padding: 8px 16px;
+            padding: 9px 18px;
             border-radius: 30px;
             font-weight: 700;
             font-size: 0.85rem;
@@ -298,13 +299,97 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.85rem;
-            display: none; /* Shown for admins */
+            display: none;
         }
 
         .post-caption {
             font-size: 1rem;
             line-height: 1.5;
             word-break: break-word;
+        }
+
+        /* Modal Profile Settings */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-card {
+            background: #12141d;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .modal-card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-input-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .modal-input-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .modal-btn-save {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #07080c;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .modal-btn-close {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         #fileInput { display: none; }
@@ -327,23 +412,23 @@
 
     <div class="main-container">
         
-        <!-- Upload Card (Visible only to admins) -->
+        <!-- Upload Card (Admin Only) -->
         <div class="upload-card" id="uploadCard">
             <input type="file" id="fileInput" multiple accept="image/*,video/*">
             
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-                <div style="font-size: 2.5rem; color: var(--accent-cyan); margin-bottom: 8px;">
+                <div style="font-size: 2.8rem; color: var(--accent-cyan); margin-bottom: 10px;">
                     <i class="fa-solid fa-cloud-arrow-up"></i>
                 </div>
-                <h3>העלה סרטונים או תמונות חדשות</h3>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">בחר עד 5 קבצים מהגלריה</p>
+                <h3>לחץ כאן לבחירת סרטונים או תמונות מהגלריה</h3>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">תומך עד 5 קבצים בו-זמנית</p>
             </div>
 
             <div class="previews-grid" id="previewsGrid"></div>
-            <textarea id="captionInput" rows="2" placeholder="כתוב משהו על המדיה..."></textarea>
+            <textarea id="captionInput" rows="2" placeholder="כתוב משהו על המדיה שאתה מעלה..."></textarea>
             
             <button class="post-btn" onclick="publishPost()">
-                <i class="fa-solid fa-paper-plane"></i> פרסם לכולם באתר
+                <i class="fa-solid fa-paper-plane"></i> פרסם מיד לכולם באתר
             </button>
         </div>
 
@@ -354,14 +439,36 @@
 
     </div>
 
+    <!-- Profile Modal Settings -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <h2><i class="fa-solid fa-user-gear"></i> הגדרות פרופיל אישי</h2>
+            <div class="modal-input-group">
+                <label>שם תצוגה באתר</label>
+                <input type="text" id="editDisplayName" placeholder="הכנס שם חדש...">
+            </div>
+            <div class="modal-input-group">
+                <label>כתובת אימייל</label>
+                <input type="text" id="editEmail" disabled style="opacity: 0.6; cursor: not-allowed;">
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">
+                💡 כשאמיר או אשורי מחוברים, הם מנהלי העל של האתר עם הרשאות העלאה ומחיקה מלאות.
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn-save" onclick="saveProfileChanges()">שמור שינויים</button>
+                <button class="modal-btn-close" onclick="closeProfileModal()">סגור</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Firebase SDK Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ==========================================
-        // 🔑 הגדרות Firebase שהתקבלו מהפרויקט שלך
+        // 🔑 הגדרות Firebase שלך
         // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyA6O5-TaqPQZ7Rd7rxgkuZma830huGcWVE",
@@ -377,7 +484,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // המיילים המורשים בלבד (מנהלי האתר)
+        // המיילים המורשים (מנהלים)
         const ADMIN_EMAILS = [
             "x2playsupport@gmail.com",
             "osheri.groberman16@gmail.com"
@@ -392,24 +499,22 @@
             const authBox = document.getElementById('authBox');
             const uploadCard = document.getElementById('uploadCard');
 
-            if (user && ADMIN_EMAILS.includes(user.email)) {
+            if (user) {
+                const displayName = user.displayName || user.email.split('@')[0];
                 authBox.innerHTML = `
-                    <div class="user-pill">
+                    <div class="user-pill" onclick="openProfileModal()" title="לחץ לפרופיל והגדרות">
                         <img src="${user.photoURL || 'https://via.placeholder.com/30'}" alt="User">
-                        <span>${user.displayName || user.email}</span>
-                        <button class="logout-btn" onclick="window.logout()">יציאה</button>
+                        <span>${displayName}</span>
+                        <i class="fa-solid fa-chevron-down" style="font-size:0.75rem; color:var(--text-muted);"></i>
                     </div>
+                    <button class="logout-btn" onclick="window.logout()" style="background:none; border:none; color:#ff4757; cursor:pointer; font-weight:600; font-size:0.85rem; margin-right:4px;">יציאה</button>
                 `;
-                uploadCard.style.display = 'block';
-            } else if (user) {
-                authBox.innerHTML = `
-                    <div class="user-pill">
-                        <img src="${user.photoURL || 'https://via.placeholder.com/30'}" alt="User">
-                        <span>${user.displayName || user.email}</span>
-                        <button class="logout-btn" onclick="window.logout()">יציאה</button>
-                    </div>
-                `;
-                uploadCard.style.display = 'none';
+
+                if (ADMIN_EMAILS.includes(user.email)) {
+                    uploadCard.style.display = 'block';
+                } else {
+                    uploadCard.style.display = 'none';
+                }
             } else {
                 authBox.innerHTML = `
                     <button class="google-login-btn" onclick="window.loginWithGoogle()">
@@ -434,6 +539,36 @@
             await signOut(auth);
         };
 
+        // Profile Modal Logic
+        window.openProfileModal = () => {
+            if (!currentUser) return;
+            document.getElementById('editDisplayName').value = currentUser.displayName || '';
+            document.getElementById('editEmail').value = currentUser.email;
+            document.getElementById('profileModal').style.display = 'flex';
+        };
+
+        window.closeProfileModal = () => {
+            document.getElementById('profileModal').style.display = 'none';
+        };
+
+        window.saveProfileChanges = async () => {
+            if (!currentUser) return;
+            const newName = document.getElementById('editDisplayName').value.trim();
+            if (!newName) {
+                alert("נא להזין שם תצוגה תקין.");
+                return;
+            }
+            try {
+                await updateProfile(currentUser, { displayName: newName });
+                alert("הפרטים עודכנו בהצלחה!");
+                closeProfileModal();
+                // Refresh top pill
+                onAuthStateChanged(auth, (u) => {});
+            } catch (e) {
+                alert("שגיאה בעדכון הפרופיל: " + e.message);
+            }
+        };
+
         // File Selection Handling
         const fileInput = document.getElementById('fileInput');
         fileInput.addEventListener('change', (e) => {
@@ -441,7 +576,7 @@
             if (!files.length) return;
             
             if (selectedFiles.length + files.length > 5) {
-                alert('ניתן לבחור עד 5 קבצים בלבד!');
+                alert('ניתן לבחור עד 5 קבצים בלבד בכל פעם!');
                 fileInput.value = '';
                 return;
             }
@@ -450,6 +585,7 @@
                 if (selectedFiles.length < 5) selectedFiles.push(file);
             });
             renderPreviews();
+            fileInput.value = ''; // Reset input to allow selecting same file again if needed
         });
 
         function renderPreviews() {
@@ -468,7 +604,6 @@
                 rmBtn.onclick = () => {
                     selectedFiles.splice(idx, 1);
                     renderPreviews();
-                    if(!selectedFiles.length) fileInput.value = '';
                 };
                 div.appendChild(rmBtn);
                 grid.appendChild(div);
@@ -479,7 +614,7 @@
             if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
             const caption = document.getElementById('captionInput').value.trim();
             if (selectedFiles.length === 0 && !caption) {
-                alert('אנא בחר קובץ או כתוב טקסט.');
+                alert('אנא בחר לפחות קובץ אחד או כתוב טקסט.');
                 return;
             }
 
@@ -489,7 +624,7 @@
                 mediaList.push({
                     type: file.type.startsWith('video/') ? 'video' : 'image',
                     url: base64,
-                    name: file.name
+                    name: file.name || 'media'
                 });
             }
 
@@ -497,6 +632,7 @@
                 await addDoc(collection(db, "posts"), {
                     caption: caption,
                     media: mediaList,
+                    authorName: currentUser.displayName || "מנהל מערכת",
                     authorEmail: currentUser.email,
                     createdAt: serverTimestamp()
                 });
@@ -506,6 +642,7 @@
                 document.getElementById('previewsGrid').innerHTML = '';
                 document.getElementById('captionInput').value = '';
                 loadPosts();
+                alert("הפוסט פורסם בהצלחה לכולם באתר!");
             } catch (e) {
                 alert("שגיאה בפרסום: " + e.message);
             }
@@ -527,7 +664,7 @@
                 const querySnapshot = await getDocs(q);
                 
                 if (querySnapshot.empty) {
-                    feedList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 3rem 0;">אין עדיין פוסטים באתר.</div>`;
+                    feedList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 3rem 0;">אין עדיין פוסטים באתר. המנהלים מוזמנים להעלות סרטונים!</div>`;
                     return;
                 }
 
@@ -559,13 +696,13 @@
                     item.innerHTML = `
                         <div class="post-header">
                             <div class="poster-info">
-                                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: bold; color:#fff;">מ</div>
+                                <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(45deg, var(--accent-pink), var(--accent-cyan)); display: flex; align-items: center; justify-content: center; font-weight: bold; color:#fff;">מ</div>
                                 <div>
-                                    <div style="font-weight: 700; font-size: 0.9rem;">מנהל מערכת</div>
+                                    <div style="font-weight: 700; font-size: 0.95rem;">${post.authorName || 'מנהל מערכת'}</div>
                                     <div style="font-size: 0.75rem; color: var(--text-muted);">פורסם בענן</div>
                                 </div>
                             </div>
-                            ${isAdmin ? `<button class="delete-post-btn" style="display:inline-block;" onclick="window.deletePost('${postId}')"><i class="fa-solid fa-trash"></i> מחק</button>` : ''}
+                            ${isAdmin ? `<button class="delete-post-btn" style="display:inline-block;" onclick="window.deletePost('${postId}')"><i class="fa-solid fa-trash"></i> מחק פוסט</button>` : ''}
                         </div>
                         ${mediaHTML}
                         ${post.caption ? `<div class="post-caption">${post.caption}</div>` : ''}
@@ -574,13 +711,13 @@
                 });
             } catch (e) {
                 console.error(e);
-                feedList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 2rem 0;">שגיאה בטעינת הנתונים. ודא שהגדרת את ה-Firestore Database במסוף Firebase.</div>`;
+                feedList.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 2rem 0;">שגיאה בטעינת נתוני הענן.</div>`;
             }
         }
 
         window.deletePost = async (postId) => {
             if (!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
-            if (confirm("האם למחוק פוסט זה לצמיתות?")) {
+            if (confirm("האם למחוק פוסט זה לצמיתות עבור כולם?")) {
                 try {
                     await deleteDoc(doc(db, "posts", postId));
                     loadPosts();
